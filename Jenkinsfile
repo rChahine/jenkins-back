@@ -1,5 +1,3 @@
-properties([pipelineTriggers([githubPush()])])
-
 pipeline {
     agent any
 
@@ -65,14 +63,6 @@ pipeline {
                     uvicorn app:app --host 0.0.0.0 --port 8080
                 '''
             }
-        }
-    }
-    post {
-        always {
-            sh '''#!/bin/bash
-                rm .env
-                rm -Rf .venv
-            '''   
         }
     }
 }
