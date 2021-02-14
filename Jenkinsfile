@@ -5,13 +5,15 @@ pipeline {
 
     stages {
         stage('Setup config') {
-            sh '''#!/bin/bash
+            steps {
+                sh '''#!/bin/bash
 
-                touch .env
-                echo 'DATABASE_URL=postgresql://ci:123456789@localhost:5432/ci_staging' > .env
-                echo 'JWT_SECRET=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe' > .env
-                echo 'TESTING=true' > .env
-            '''
+                    touch .env
+                    echo 'DATABASE_URL=postgresql://ci:123456789@localhost:5432/ci_staging' > .env
+                    echo 'JWT_SECRET=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe' > .env
+                    echo 'TESTING=true' > .env
+                '''
+            }
         }
         stage('Setup venv') {
             steps {
@@ -67,10 +69,12 @@ pipeline {
     }
     post {
         always {
-            sh '''#!/bin/bash
-                rm .env
-                rm -Rf .venv
-            '''
+            steps {
+                sh '''#!/bin/bash
+                    rm .env
+                    rm -Rf .venv
+                '''   
+            }
         }
     }
 }
