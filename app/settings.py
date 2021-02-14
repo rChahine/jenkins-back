@@ -5,4 +5,4 @@ config = Config('.env')
 
 DATABASE_URL = config('DATABASE_URL')
 JWT_SECRET = config('JWT_SECRET', cast=Secret)
-TESTING = config('JWT_SECRET', cast=bool, default=False)
+TESTING = config('TESTING', cast=bool, default=False)

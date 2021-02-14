@@ -4,7 +4,16 @@ pipeline {
     agent any
 
     stages {
-        stage('Dependencies') {
+        stage('Setup config') {
+            sh '''#!/bin/bash
+
+                touch .env
+                echo 'DATABASE_URL=postgresql://ci:123456789@localhost:5432/ci_staging' > .env
+                echo 'JWT_SECRET=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe' > .env
+                echo 'TESTING=true' > .env
+            '''
+        }
+        stage('Setup venv') {
             steps {
                 sh '''#!/bin/bash
 
@@ -35,12 +44,6 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
 
-                    echo "Exporting ENV_MODE var ..."
-                    export ENV_MODE=staging
-                    
-                    echo "Exporting ENV_MODE var ..."
-                    export ENV_MODE=staging
-
                     echo "Activate virtualenv ..."
                     source .venv/bin/activate
 
@@ -53,10 +56,6 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
 
-                    echo "Exporting ENV_MODE var ..."
-                    export ENV_MODE=staging
-                    export RUNNING_TEST=true
-                    
                     echo "Activate virtualenv ..."
                     source .venv/bin/activate
 
@@ -64,6 +63,14 @@ pipeline {
                     uvicorn app:app --host 0.0.0.0 --port 8080
                 '''
             }
+        }
+    }
+    post {
+        always {
+            sh '''#!/bin/bash
+                rm .env
+                rm -Rf .venv
+            '''
         }
     }
 }
