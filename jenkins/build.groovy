@@ -7,16 +7,18 @@ pipeline {
                 sh '''#!/bin/bash
 
                     touch .env
-                    echo 'DATABASE_URL=postgresql://ci:123456789@localhost:5432/ci_staging' > .env
-                    echo 'JWT_SECRET=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe' > .env
-                    echo 'TESTING=true' > .env
+                    echo '
+                        DATABASE_URL=postgresql://ci:123456789@localhost:5432/ci_staging
+                        JWT_SECRET=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe
+                        TESTING=true
+                    ' > .env
                 '''
             }
         }
         stage('Setup venv') {
             steps {
                 sh '''#!/bin/bash
-                
+
                     echo "Running virtualenv ..."
                     source .venv/bin/activate
 
