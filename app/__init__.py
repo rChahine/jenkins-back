@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .routes import router
-from .settings import RUNNING_TEST
+from .settings import TESTING
 from .models import ( # noqa F401
     User, UserChoice, Choice
 )
@@ -16,5 +16,5 @@ app = FastAPI(
 app.include_router(router, tags="main router")
 
 
-if RUNNING_TEST:
+if TESTING:
     sys.exit(0)
