@@ -55,6 +55,7 @@ pipeline {
 
                     echo "Exporting ENV_MODE var ..."
                     export ENV_MODE=staging
+                    export RUNNING_TEST=true
                     
                     echo "Activate virtualenv ..."
                     source .venv/bin/activate
