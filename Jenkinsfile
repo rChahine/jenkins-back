@@ -69,12 +69,10 @@ pipeline {
     }
     post {
         always {
-            steps {
-                sh '''#!/bin/bash
-                    rm .env
-                    rm -Rf .venv
-                '''   
-            }
+            sh '''#!/bin/bash
+                rm .env
+                rm -Rf .venv
+            '''   
         }
     }
 }
