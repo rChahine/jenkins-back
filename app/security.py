@@ -24,9 +24,9 @@ def check_encryption(plain_password: str, hashed: str) -> bool:
 
 def generate_auth_token(payload: dict) -> str:
     """ encrypt a jwt """
-    return jwt.encode(payload, JWT_SECRET, algorithm=ALGORITHM)
+    return jwt.encode(payload, str(JWT_SECRET), algorithm=ALGORITHM)
 
 
 def decode_auth_token(token: str) -> dict:
     """ decode a jwt """
-    return jwt.decode(token, JWT_SECRET, algorithms=ALGORITHM)
+    return jwt.decode(token, str(JWT_SECRET), algorithms=ALGORITHM)
