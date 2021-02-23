@@ -117,7 +117,6 @@ async def add_choice(
 
 @app.get('/choices')
 async def retrieve_choice(
-    user: User = Depends(retrieve_user),
     session: Session = Depends(get_session)
 ):
     """ Return list of choices in database """
