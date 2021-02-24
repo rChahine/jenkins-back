@@ -193,7 +193,9 @@ async def unvote(
     """ add a vote for a user """
     if user.role == "U":
 
-        choice = session.query(Choice).filter_by().one_or_none()
+        choice = session.query(Choice).filter_by(
+            id=choice_id
+        ).one_or_none()
 
         if choice is not None:
 
@@ -217,3 +219,23 @@ async def unvote(
             status_code=401,
             detail="Only users are allowed to vote"
         )
+
+
+@app.delete('/choices/{choice_id}')
+async def delete_choice(
+    choice_id: int,
+    user: User = Depends(retrieve_user),
+    session: Session = Depends(get_session)
+):
+    if user.role == 'A':
+
+        session.query(Choice).filter_by(
+            id=choice_id
+        ).delete()
+
+        session.commit()
+
+        return {'detail': "Choice deleted"}
+
+    else:
+        raise HTTPException(status_code=401)
