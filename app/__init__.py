@@ -1,6 +1,7 @@
 import sys
 
 from fastapi import Body, Depends, FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from .database import get_session
@@ -14,6 +15,14 @@ app = FastAPI(
     title="CI api",
     docs_url=None,
     redoc_url="/doc"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 
