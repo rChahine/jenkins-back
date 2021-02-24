@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        githubPush()
+    }
 
     stages {
         stage('Setup config') {
