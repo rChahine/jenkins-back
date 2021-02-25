@@ -2,6 +2,13 @@ pipeline {
     agent any
 
     stages {
+        stage('Create venv') {
+            steps {
+                sh '''#!/bin/bash
+                    python3.9 -m venv .venv
+                '''
+            }
+        }
         stage('Setup .env') {
             steps {
                 sh '''#!/bin/bash
