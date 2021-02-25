@@ -61,8 +61,11 @@ pipeline {
         stage('test') {
             steps {
                 sh '''#!/bin/bash
-                   echo "Running tests ..."
-                   pytest
+                    echo "Activate virtualenv ..."
+                    source .venv/bin/activate
+
+                    echo "Running tests ..."
+                    pytest
                 '''
             }
         }
