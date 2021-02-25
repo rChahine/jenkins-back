@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Create venv') {
             steps {
