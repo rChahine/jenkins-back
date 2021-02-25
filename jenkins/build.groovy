@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Setup config') {
+        stage('Setup .env') {
             steps {
                 sh '''#!/bin/bash
 
@@ -15,7 +15,7 @@ pipeline {
                 '''
             }
         }
-        stage('Setup venv') {
+        stage('Setup virtual env') {
             steps {
                 sh '''#!/bin/bash
 
@@ -27,7 +27,7 @@ pipeline {
                 '''
             }
         }
-        stage('SetupDatabase') {
+        stage('Setup database') {
             steps {
                 sh '''#!/bin/bash
 
@@ -39,7 +39,7 @@ pipeline {
                 '''
             }
         }
-        stage('MigrateDatabase') {
+        stage('Migrate database') {
             steps {
                 sh '''#!/bin/bash
 
@@ -51,7 +51,7 @@ pipeline {
                 '''
             }
         }
-        stage('RunApi') {
+        stage('Run application') {
             steps {
                 sh '''#!/bin/bash
 
@@ -62,6 +62,12 @@ pipeline {
                     uvicorn app:app --host 0.0.0.0 --port 8080
                 '''
             }
+        }
+    }
+    post {
+        always {
+            echo 'Delete directory'
+            deleteDir()
         }
     }
 }
