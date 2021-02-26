@@ -147,7 +147,7 @@ async def retrieve_choice(
 
 
 @app.get('/choices')
-async def retrieve_choice(
+async def retrieve_choice_connected(
     user: User = Depends(retrieve_user),
     session: Session = Depends(get_session)
 ):
