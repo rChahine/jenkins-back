@@ -3,9 +3,10 @@ import sys
 from fastapi import Body, Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from .database import get_session
-from .models import Choice, User, UserChoice  # noqa F401
+from .models import Choice, User, UserChoice 
 from .schemas import newUserSchema
 from .security import decode_auth_token, encrypt_password
 from .settings import TESTING
@@ -109,7 +110,6 @@ async def add_choice(
     session: Session = Depends(get_session)
 ):
     """ Add a choice in database """
-    print(user)
     if user.role == "A":
         choice = Choice(wording=wording)
 
@@ -146,6 +146,39 @@ async def retrieve_choice(
     return beautified
 
 
+@app.get('/choices')
+async def retrieve_choice(
+    user: User = Depends(retrieve_user),
+    session: Session = Depends(get_session)
+):
+    """ Return list of choices in database """
+
+    choices = session.query(Choice).all()
+    beautified = []
+
+    choosens = session.query(UserChoice).all()
+
+    for choice in choices:
+
+        is_choosen = False
+
+        nbVote = session.query(UserChoice)\
+            .filter(UserChoice.idChoice == choice.id)\
+            .count()
+
+        for c in choosens:
+            if choice.id == c.idChoice:
+                is_choosen = True
+
+        beautified.append({
+            'choice': choice,
+            'nb_vote': nbVote,
+            'choosen': is_choosen
+        })
+
+    return beautified
+
+
 @app.put("/vote/{choice_id}")
 async def add_vote(
     choice_id: int,
@@ -160,14 +193,16 @@ async def add_vote(
         ).one_or_none()
 
         if choice is not None:
+            try:
+                vote = UserChoice(
+                    idUser=user.id,
+                    idChoice=choice_id
+                )
 
-            vote = UserChoice(
-                idUser=user.id,
-                idChoice=choice_id
-            )
-
-            session.add(vote)
-            session.commit()
+                session.add(vote)
+                session.commit()
+            except IntegrityError as err:
+                raise HTTPException(status_code=409)
 
             return {'detail': "Vote added"}
 
