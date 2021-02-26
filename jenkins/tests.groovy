@@ -30,7 +30,7 @@ pipeline {
                     source .venv/bin/activate
 
                     echo "Install dependencies ..."
-                    pip install -r requirements.txt
+                    pip install -r requirements.txt --no-cache-dir
                 '''
             }
         }
