@@ -82,3 +82,7 @@ def client_auth_user(signin_user):
     """ add token in header for user """
     client.headers.update({"Authorization": signin_user["token"]})
     return client
+
+@pytest.fixture
+def get_client():
+    return client

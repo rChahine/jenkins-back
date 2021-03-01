@@ -109,7 +109,6 @@ async def add_choice(
     session: Session = Depends(get_session)
 ):
     """ Add a choice in database """
-    print(user)
     if user.role == "A":
         choice = Choice(wording=wording)
 
