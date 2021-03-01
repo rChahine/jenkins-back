@@ -44,4 +44,20 @@ def test_get_choice_no_login(get_client):
 
 
 def test_get_choices_logged_in(client_auth_admin):
-    r = client_auth_admin.get('/')
+    r = client_auth_admin.get('/choices_connected')
+    assert r.status_code == 200
+
+
+def test_add_vote(client_auth_admin):
+    r = client_auth_admin.put('/vote/1')
+    assert r.status_code == 401
+
+
+def test_delete_vote(client_auth_admin):
+    r = client_auth_admin.delete('/vote/1')
+    assert r.status_code == 401
+
+
+def test_delete_choice(client_auth_admin):
+    r = client_auth_admin.delete('/choices/1')
+    assert r.status_code == 200

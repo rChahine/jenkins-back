@@ -82,25 +82,27 @@ async def add_user(
     session: Session = Depends(get_session)
 ):
     """ add a new user in database """
+    if user.role == "A":
+        username_exist = session.query(User).filter_by(
+            username=new_user.username
+        ).one_or_none()
 
-    username_exist = session.query(User).filter_by(
-        username=new_user.username
-    ).one_or_none()
+        if username_exist is None:
 
-    if username_exist is None:
+            user_to_add = User(
+                username=new_user.username,
+                password=encrypt_password(new_user.password),
+                role=new_user.role
+            )
 
-        user_to_add = User(
-            username=new_user.username,
-            password=encrypt_password(new_user.password),
-            role=new_user.role
-        )
+            session.add(user_to_add)
+            session.commit()
 
-        session.add(user_to_add)
-        session.commit()
-
-        return {'detail': "User added"}
+            return {'detail': "User added"}
+        else:
+            raise HTTPException(status_code=409, detail="Username already exist")
     else:
-        raise HTTPException(status_code=409, detail="Username already exist")
+        raise HTTPException(status_code=401)
 
 
 @app.post('/choices')
