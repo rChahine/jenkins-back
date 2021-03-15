@@ -11,7 +11,7 @@ pipeline {
         stage('Setup .env') {
             steps {
                     powershell '''
-                        type nul > .env
+                        Out-File -FilePath .env
 
                         echo DATABASE_URL=postgresql://u3ggi38lxczfan4hmvqp:0ociuSjr4TkmPuf510CG@b9urnsqkuw5cfwy1io7c-postgresql.services.clever-cloud.com:5432/b9urnsqkuw5cfwy1io7c >> .env
                         echo SECRET_KEY=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe >> .env
