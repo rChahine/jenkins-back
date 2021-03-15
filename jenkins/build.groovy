@@ -3,14 +3,14 @@ pipeline {
     stages {
         stage('Create venv') {
             steps {
-                bat '''
+                powershell '''
                     python -m venv .venv
                 '''
             }
         }
         stage('Setup .env') {
             steps {
-                    bat '''
+                    powershell '''
                         type nul > .env
 
                         echo DATABASE_URL=postgresql://u3ggi38lxczfan4hmvqp:0ociuSjr4TkmPuf510CG@b9urnsqkuw5cfwy1io7c-postgresql.services.clever-cloud.com:5432/b9urnsqkuw5cfwy1io7c >> .env
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Setup virtual env') {
             steps {
-                bat '''
+                powershell '''
 
                     echo "Running virtualenv ..."
                     .\.venv\Scripts\activate
@@ -34,7 +34,7 @@ pipeline {
         
         stage('Migrate database') {
             steps {
-                bat '''
+                powershell '''
 
                     echo "Activate virtualenv ..."
                     .\.venv\Scripts\activate
@@ -46,7 +46,7 @@ pipeline {
         }
         stage('Run application') {
             steps {
-                bat '''
+                powershell '''
 
                     echo "Activate virtualenv ..."
                     .\.venv\Scripts\activate
