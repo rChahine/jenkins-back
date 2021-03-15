@@ -10,8 +10,8 @@ pipeline {
         }
         stage('Setup .env') {
             steps {
-                    powershell '''
-                        Out-File -FilePath .env
+                    bat '''
+                        type nul > .env
 
                         echo DATABASE_URL=postgresql://u3ggi38lxczfan4hmvqp:0ociuSjr4TkmPuf510CG@b9urnsqkuw5cfwy1io7c-postgresql.services.clever-cloud.com:5432/b9urnsqkuw5cfwy1io7c >> .env
                         echo SECRET_KEY=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe >> .env
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Setup virtual env') {
             steps {
-                powershell '''
+                bat '''
 
                     echo "Running virtualenv ..."
                     .venv/Scripts/activate
@@ -34,7 +34,7 @@ pipeline {
         
         stage('Migrate database') {
             steps {
-                powershell '''
+                bat '''
 
                     echo "Activate virtualenv ..."
                     .venv/Scripts/activate
@@ -46,7 +46,7 @@ pipeline {
         }
         stage('Run application') {
             steps {
-                powershell '''
+                bat '''
 
                     echo "Activate virtualenv ..."
                     .venv/Scripts/activate
