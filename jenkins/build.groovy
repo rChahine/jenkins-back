@@ -24,7 +24,7 @@ pipeline {
                 powershell '''
 
                     echo "Running virtualenv ..."
-                    .\.venv\Scripts\activate
+                    .venv/Scripts/activate
 
                     echo "Install dependencies ..."
                     pip install -r requirements.txt --no-cache-dir
@@ -37,7 +37,7 @@ pipeline {
                 powershell '''
 
                     echo "Activate virtualenv ..."
-                    .\.venv\Scripts\activate
+                    .venv/Scripts/activate
 
                     echo "Migrating database ..."
                     alembic upgrade head
@@ -49,7 +49,7 @@ pipeline {
                 powershell '''
 
                     echo "Activate virtualenv ..."
-                    .\.venv\Scripts\activate
+                    .venv/Scripts/activate
 
                     echo "Running API ..."
                     uvicorn app:app --host 0.0.0.0 --port 8080
