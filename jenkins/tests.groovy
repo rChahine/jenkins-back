@@ -4,54 +4,41 @@ pipeline {
     stages {
         stage('Create venv') {
             steps {
-                sh '''#!/bin/bash
-                    python3.9 -m venv .venv
+                bat '''
+                    python -m venv .venv
                 '''
             }
         }
         stage('Setup .env') {
             steps {
-                sh '''#!/bin/bash
-
-                    touch .env
-                    echo '
-                        DATABASE_URL=postgresql://ci:123456789@localhost:5432/ci_staging
-                        JWT_SECRET=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe
-                        TESTING=true
-                    ' > .env
+                bat '''
+                    type nul > .env
+                    
+                    echo DATABASE_URL=postgresql://u3ggi38lxczfan4hmvqp:0ociuSjr4TkmPuf510CG@b9urnsqkuw5cfwy1io7c-postgresql.services.clever-cloud.com:5432/b9urnsqkuw5cfwy1io7c >> .env
+                    echo SECRET_KEY=zefuihzefizpaefhzoiefhzeiofhze2342ofhizefzoe >> .env
+                    echo TESTING=true >> .env
                 '''
             }
         }
         stage('Setup virtual env') {
             steps {
-                sh '''#!/bin/bash
+                bat '''
 
                     echo "Running virtualenv ..."
-                    source .venv/bin/activate
+                    .\.venv\Scripts\activate
 
                     echo "Install dependencies ..."
                     pip install -r requirements.txt --no-cache-dir
                 '''
             }
         }
-        stage('Setup database') {
-            steps {
-                sh '''#!/bin/bash
-
-                    echo "Clear Database ..."
-                    sudo -u postgres psql -c "DROP DATABASE IF EXISTS ci_staging;"
-                    
-                    echo "Setup new Database ..."
-                    sudo -u postgres psql -c "CREATE DATABASE ci_staging;"
-                '''
-            }
-        }
+        
         stage('Migrate database') {
             steps {
-                sh '''#!/bin/bash
+                bat '''
 
                     echo "Activate virtualenv ..."
-                    source .venv/bin/activate
+                    .\.venv\Scripts\activate
 
                     echo "Migrating database ..."
                     alembic upgrade head
@@ -60,9 +47,9 @@ pipeline {
         }
         stage('test') {
             steps {
-                sh '''#!/bin/bash
+                bat '''
                     echo "Activate virtualenv ..."
-                    source .venv/bin/activate
+                    .\.venv\Scripts\activate
 
                     echo "Running tests ..."
                     pytest
